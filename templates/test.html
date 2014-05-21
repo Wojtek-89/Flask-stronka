@@ -1,0 +1,9 @@
+{% extends "template.html" %}
+{% block content %}
+	{% for item in data %}
+		<h2>----------------------------------</h2>
+		<h2>{{ item.title }}</h2>
+		<h2><img src="{{ item.img }}" alt="opis" /></h2>
+		<h2>----------------------------------</h2>
+	{% endfor %}
+{% endblock %}
