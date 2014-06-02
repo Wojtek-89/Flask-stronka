@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+{% block content %}
+	<h1>10 ostatnich newsow z Wykopu</h1>
+	{% for item in data %}
+		<h2>{{ item.title }}</h2>
+		<p>Opublikowano: {{ item.published}}<p>
+		<p>{{ item.summary|safe}}</p>
+	{% endfor %}
+{% endblock %}
