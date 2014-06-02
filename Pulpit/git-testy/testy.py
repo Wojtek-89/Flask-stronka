@@ -1,2 +1,0 @@
-print "testy"
-print "loloffddfsefedc"
