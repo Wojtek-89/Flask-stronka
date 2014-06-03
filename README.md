@@ -1,1 +1,1 @@
-Logowanie i sprawdzanie 10 wiadomości z wykop.pl; hasło - admin, login - password
+Logowanie i sprawdzanie 10 wiadomości z wykop.pl; login - admin, hasło - password
