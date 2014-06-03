@@ -1,2 +1,1 @@
--Feeder-
-This app download from Wykop.pl ten latest news.
+Logowanie i sprawdzanie 10 wiadomości z wykop.pl; hasło - admin, login - password
