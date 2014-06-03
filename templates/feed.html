@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 {% extends "template.html" %}
 {% block content %}
     <a href="/logout">Logout</a>
     <br />
 	<h1>10 ostatnich newsow z Wykopu</h1>
 	<br />
+=======
+{% extends "index.html" %}
+{% block content %}
+	<h1>10 ostatnich newsow z Wykopu</h1>
+>>>>>>> e64adeac61934a93504f0901773c08bbc848a54c
 	{% for item in data %}
 		<h2>{{ item.title }}</h2>
 		<p>Opublikowano: {{ item.published}}<p>
