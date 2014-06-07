@@ -3,33 +3,43 @@ import feedparser
 from bs4 import BeautifulSoup
 from functools import *
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
-from database import db_session
-from models import User
+from sqlalchemy import Column, Integer, String, Sequence
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Sequence
+from sqlalchemy.orm import sessionmaker
+
+engine = create_engine('sqlite:////tmp/test.db', echo=False)
+Base = declarative_base()
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+db_session = Session()
 
 app = Flask(__name__)
 
 app.secret_key = "cats"
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
-
-class RegistrationForm(Form):
-    username = TextField('Username', [validators.Length(min=4, max=25)])
-    password = PasswordField('New Password', [
-        validators.Required(),
-        validators.EqualTo('confirm', message='Passwords must match')])
-    confirm = PasswordField('Repeat Password')
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    name = Column(String(50))
+    password = Column(String(12))
+    
+    def __repr__(self):
+        return "<User(name='%s', password='%s')>" % (self.name, self.password)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user = User(form.username.data, form.password.data)
-        db_session.add(user)
-        flash('Thanks for registering')
-        return redirect(url_for('log'))
-    return render_template('register.html', form=form)
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] == '' or request.form['password'] == '':
+            error ='wrong login or password'
+        else:
+            user = User(name=request.form['username'], password=request.form['password'])
+            db_session.add(user)
+            db_session.commit()
+            flash('Registered')
+    return render_template('register.html', error=error)
 
 @app.route('/')
 def home():
@@ -52,10 +62,13 @@ def logout():
     return redirect(url_for('log'))
 
 @app.route('/log', methods=['GET', 'POST'])
-def log(): #Funkcja musi sprawdzać czy podane dane użytkownika znajdują się w bazie danych
+def log():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'password':
+        entity = False
+        for user in db_session.query(User).filter(User.name == request.form['username'], User.password == request.form['password']):
+            entity = True
+        if entity == False:
             error ='wrong login or password'
         else:
             session['logged_in'] = True
@@ -65,9 +78,6 @@ def log(): #Funkcja musi sprawdzać czy podane dane użytkownika znajdują się 
 @app.route('/wykop')
 @login_required
 def wykop():
-    """
-    Render view with ten news from wykop.
-    """
     feed = feedparser.parse('http://www.wykop.pl/rss/')
     data = []
     for entry in feed['entries'][:10]:

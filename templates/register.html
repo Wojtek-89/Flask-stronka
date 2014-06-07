@@ -1,9 +1,23 @@
-{% from "_formhelpers.html" import render_field %}
-<form method=post action="/register">
-  <dl>
-    {{ render_field(form.username) }}
-    {{ render_field(form.password) }}
-    {{ render_field(form.confirm) }}
-  </dl>
-  <p><input type=submit value=Register>
-</form>
+{% extends "template.html" %}
+{% block content %}
+	<h1>Registration</h1>
+    {% if error %}
+	    <p class=error><strong>Error:</strong>{{error}}
+	{% endif %}
+	<form action="" method=post>
+		<dl>
+			<dt>Username:
+			<dd><input type=text name=username value="{{request.form.username}}">
+			<dt>Password:
+			<dd><input type=password name=password>
+		</dl>
+		<p><input type=submit value=Register>
+	</form>
+    {% for message in get_flashed_messages() %}
+	    <div class=flash>
+	    {{ message }}
+	    </div>
+	{% endfor %}
+    <p> Logowanie: <a href="/log">kliknij</a></p>
+{% endblock %}
+
