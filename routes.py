@@ -1,3 +1,13 @@
+# Dużo lepiej, mam jednak pare ale. Modeli nie trzyma się z widokam.
+# bs4 jest spoko, ale dla czego zmieniles na niego z feedparsera?
+# bajzel w tym programie troche
+# PEP-8!!! jest do tego apka konsolowa nawet, edytory maja wbudowane sprawdzanie, poza tym
+# zasady sa proste.
+# nastepna misja, po kliknieciu na wybrany artykul otwiera sie on caly na Twojej stronie.
+# artykuly takie zapisuj do bazy.
+# przydatny lib:
+# https://github.com/grangier/python-goose
+
 from flask import *
 import feedparser
 from bs4 import BeautifulSoup
